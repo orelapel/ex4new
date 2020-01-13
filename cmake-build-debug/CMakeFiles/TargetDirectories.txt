@@ -1,3 +1,3 @@
-/home/orelapel/CLionProjects/ex4/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/orelapel/CLionProjects/ex4/cmake-build-debug/CMakeFiles/ex4.dir
-/home/orelapel/CLionProjects/ex4/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/noa/CLionProjects/ex4new/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/noa/CLionProjects/ex4new/cmake-build-debug/CMakeFiles/ex4.dir
+/home/noa/CLionProjects/ex4new/cmake-build-debug/CMakeFiles/edit_cache.dir
