@@ -84,7 +84,52 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/noa/CLionProjects/ex4new/CacheManager.h">
+			<Option target="ex4"/>
+		</Unit>
+		<Unit filename="/home/noa/CLionProjects/ex4new/ClientHandler.h">
+			<Option target="ex4"/>
+		</Unit>
+		<Unit filename="/home/noa/CLionProjects/ex4new/FileCacheManager.cpp">
+			<Option target="ex4"/>
+		</Unit>
+		<Unit filename="/home/noa/CLionProjects/ex4new/FileCacheManager.h">
+			<Option target="ex4"/>
+		</Unit>
+		<Unit filename="/home/noa/CLionProjects/ex4new/MySerialServer.cpp">
+			<Option target="ex4"/>
+		</Unit>
+		<Unit filename="/home/noa/CLionProjects/ex4new/MySerialServer.h">
+			<Option target="ex4"/>
+		</Unit>
+		<Unit filename="/home/noa/CLionProjects/ex4new/MyTestClientHandler.cpp">
+			<Option target="ex4"/>
+		</Unit>
+		<Unit filename="/home/noa/CLionProjects/ex4new/MyTestClientHandler.h">
+			<Option target="ex4"/>
+		</Unit>
+		<Unit filename="/home/noa/CLionProjects/ex4new/Searchable.h">
+			<Option target="ex4"/>
+		</Unit>
+		<Unit filename="/home/noa/CLionProjects/ex4new/Searcher.h">
+			<Option target="ex4"/>
+		</Unit>
+		<Unit filename="/home/noa/CLionProjects/ex4new/Solver.h">
+			<Option target="ex4"/>
+		</Unit>
+		<Unit filename="/home/noa/CLionProjects/ex4new/State.h">
+			<Option target="ex4"/>
+		</Unit>
+		<Unit filename="/home/noa/CLionProjects/ex4new/StringReverser.cpp">
+			<Option target="ex4"/>
+		</Unit>
+		<Unit filename="/home/noa/CLionProjects/ex4new/StringReverser.h">
+			<Option target="ex4"/>
+		</Unit>
 		<Unit filename="/home/noa/CLionProjects/ex4new/main.cpp">
+			<Option target="ex4"/>
+		</Unit>
+		<Unit filename="/home/noa/CLionProjects/ex4new/server_side.h">
 			<Option target="ex4"/>
 		</Unit>
 		<Unit filename="/home/noa/CLionProjects/ex4new/CMakeLists.txt">
