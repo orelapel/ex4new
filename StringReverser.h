@@ -6,8 +6,16 @@
 #define EX4_STRINGREVERSER_H
 
 
-class StringReverser {
+#include "Solver.h"
+#include "string.h"
+#include <string>
+#include <algorithm>
 
+using namespace std;
+class StringReverser : public Solver<string,string>{
+public:
+    string solve(string s);
+    ~StringReverser();
 };
 
 

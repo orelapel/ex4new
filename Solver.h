@@ -5,10 +5,9 @@
 #ifndef EX4_SOLVER_H
 #define EX4_SOLVER_H
 
-
+template <class Problem, class Solution>
 class Solver {
-    template <class Problem, class Solution>
-    Solution solve(Problem p);
+    virtual Solution solve(Problem p);
 };
 
 #endif //EX4_SOLVER_H
