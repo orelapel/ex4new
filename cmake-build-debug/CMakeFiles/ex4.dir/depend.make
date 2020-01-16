@@ -5,13 +5,10 @@ CMakeFiles/ex4.dir/FileCacheManager.cpp.o: ../CacheManager.h
 CMakeFiles/ex4.dir/FileCacheManager.cpp.o: ../FileCacheManager.cpp
 CMakeFiles/ex4.dir/FileCacheManager.cpp.o: ../FileCacheManager.h
 
-CMakeFiles/ex4.dir/MySerialServer.cpp.o: ../CacheManager.h
 CMakeFiles/ex4.dir/MySerialServer.cpp.o: ../ClientHandler.h
 CMakeFiles/ex4.dir/MySerialServer.cpp.o: ../MySerialServer.cpp
 CMakeFiles/ex4.dir/MySerialServer.cpp.o: ../MySerialServer.h
-CMakeFiles/ex4.dir/MySerialServer.cpp.o: ../MyTestClientHandler.h
 CMakeFiles/ex4.dir/MySerialServer.cpp.o: ../Server.h
-CMakeFiles/ex4.dir/MySerialServer.cpp.o: ../Solver.h
 
 CMakeFiles/ex4.dir/MyTestClientHandler.cpp.o: ../CacheManager.h
 CMakeFiles/ex4.dir/MyTestClientHandler.cpp.o: ../ClientHandler.h

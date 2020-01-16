@@ -4,11 +4,13 @@
 
 #ifndef EX4_SOLVER_H
 #define EX4_SOLVER_H
-
-template <class Problem, class Solution>
+#include "string"
+using namespace std;
+//template <class Problem, class Solution>
 class Solver {
 public:
-    virtual Solution solve(Problem p);
+    //virtual Solution solve(Problem p);
+    virtual string solve(string s)=0;
 };
 
 #endif //EX4_SOLVER_H

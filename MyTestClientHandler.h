@@ -12,11 +12,11 @@
 
 //template <class Solution, class Problem>
 class MyTestClientHandler: public ClientHandler {
-    Solver<string,string> *solve;
+    Solver *solve;
     CacheManager<string> *cashe;
 public:
     void handleClient(int socket);
-    MyTestClientHandler(Solver<string, string> *solver, CacheManager<string> *myCashe) {
+    MyTestClientHandler(Solver *solver, CacheManager<string> *myCashe) {
         solve = solver;
         cashe = myCashe;
     }

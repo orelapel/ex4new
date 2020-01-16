@@ -25,7 +25,7 @@ public:
     }
     void insert(string key, T obj) {
         fstream fileForWriteObj;
-        string file_name = key;
+        string file_name = key+".txt";
         fileForWriteObj.open(file_name,ios::out|ios::binary);
         //if from any reason the program failed in open the file we will throw an error
         if(!fileForWriteObj){
@@ -93,7 +93,7 @@ public:
         }
         else {
             fstream fileForReadObj;
-            string file_name = key;
+            string file_name = key+".txt";
             fileForReadObj.open(file_name,ios::in|ios::binary);
             T obj;
             //if the file not found or from any reason the program failed in open it- we will throw an error
