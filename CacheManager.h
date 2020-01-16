@@ -19,6 +19,7 @@ private:
     unordered_map<std::string,std::pair<T, std::list<string>::iterator>> _cashe;
     unsigned int capacityRam;
 public:
+    //constructor
     CacheManager(unsigned int capacity) {
         this->capacityRam =  capacity;
     }
