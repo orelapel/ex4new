@@ -1,4 +1,4 @@
-# Install script for directory: /home/noa/CLionProjects/ex4new
+# Install script for directory: /home/orelapel/CLionProjects/ex4new
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/noa/CLionProjects/ex4new/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/orelapel/CLionProjects/ex4new/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

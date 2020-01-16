@@ -6,11 +6,13 @@
 #define EX4_MYSERIALSERVER_H
 
 
-#include "server_side.h"
+#include "Server.h"
 
-class MySerialServer: sever_side::Server{
-    void start(int port);
-
+class MySerialServer: public server_side::Server{
+    bool shouldStop = false;
+public:
+    int start(int port, ClientHandler *clientHandler);
+    void stop();
 };
 
 

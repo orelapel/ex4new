@@ -10,10 +10,16 @@
 #include "Solver.h"
 #include "CacheManager.h"
 
-template <class Solution, class Problem>
+//template <class Solution, class Problem>
 class MyTestClientHandler: public ClientHandler {
-    Solver *s;
-    CacheManager<Solution,Problem> *cashe;
+    Solver<string,string> *solve;
+    CacheManager<string> *cashe;
+public:
+    void handleClient(int socket);
+    MyTestClientHandler(Solver<string, string> *solver, CacheManager<string> *myCashe) {
+        solve = solver;
+        cashe = myCashe;
+    }
 };
 
 
