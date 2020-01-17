@@ -29,5 +29,4 @@ public:
     void BFS(int s);
 };
 
-
 #endif //EX4_BFSSEARCH_H
