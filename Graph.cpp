@@ -32,7 +32,7 @@ void Graph::BFS(int s)
     // 'i' will be used to get all adjacent
     // vertices of a vertex
     list<int>::iterator i;
-
+// ..
     while(!queue.empty())
     {
         // Dequeue a vertex from queue and print it
