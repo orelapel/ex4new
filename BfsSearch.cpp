@@ -2,20 +2,20 @@
 // Created by orelapel on 1/17/20.
 //
 
-#include "Graph.h"
+#include "BfsSearch.h"
 
-Graph::Graph(int V)
+BfsSearch::BfsSearch(int V)
 {
     this->V = V;
     adj = new list<int>[V];
 }
 
-void Graph::addEdge(int v, int w)
+void BfsSearch::addEdge(int v, int w)
 {
     adj[v].push_back(w); // Add w to v’s list.
 }
 
-void Graph::BFS(int s)
+void BfsSearch::BFS(int s)
 {
     // Mark all the vertices as not visited
     bool *visited = new bool[V];

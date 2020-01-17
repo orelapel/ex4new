@@ -2,8 +2,8 @@
 // Created by orelapel on 1/17/20.
 //
 
-#ifndef EX4_GRAPH_H
-#define EX4_GRAPH_H
+#ifndef EX4_BFSSEARCH_H
+#define EX4_BFSSEARCH_H
 
 
 #include<iostream>
@@ -13,14 +13,14 @@ using namespace std;
 
 // This class represents a directed graph using
 // adjacency list representation
-class Graph {
+class BfsSearch {
     int V;    // No. of vertices
 
     // Pointer to an array containing adjacency
     // lists
     list<int> *adj;
 public:
-    Graph(int V);  // Constructor
+    BfsSearch(int V);  // Constructor
 
     // function to add an edge to graph
     void addEdge(int v, int w);
@@ -30,4 +30,4 @@ public:
 };
 
 
-#endif //EX4_GRAPH_H
+#endif //EX4_BFSSEARCH_H
