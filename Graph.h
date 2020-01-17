@@ -13,7 +13,7 @@ using namespace std;
 
 // This class represents a directed graph using
 // adjacency list representation
-class Graph { //..
+class Graph {
     int V;    // No. of vertices
 
     // Pointer to an array containing adjacency
