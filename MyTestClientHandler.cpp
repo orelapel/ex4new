@@ -20,20 +20,29 @@
              line += buffer[0];
              read( socket , buffer, 1);
          }
+         int len = line.length();
+         char lineChar[len+1];
+         strcpy(lineChar,line.c_str());
+         if (strcmp(lineChar,"end")==0){
+             break;
+         }
          if (cache->isSoulutaionExist(line)){
              string sol = cache->get(line);
              int length = sol.length();
              char lineToChar[length+1];
              strcpy(lineToChar,sol.c_str());
              send(socket,lineToChar,length+1,0);
-         }else {
-             Solver<string,string> *stringReverse = new StringReverser();
+             cout<<sol<<endl;
+         } else {
+             Solver *stringReverse = new StringReverser();
              string sol = stringReverse->solve(line);
              cache->insert(line, sol);
              int length = sol.length();
              char lineToChar[length+1];
              strcpy(lineToChar,sol.c_str());
              send(socket,lineToChar,length+1,0);
+             cout<<sol<<endl;
          }
+         line = "";
     }
 }

@@ -12,6 +12,7 @@ class MySerialServer: public server_side::Server{
     bool shouldStop = false;
 public:
     int start(int port, ClientHandler *clientHandler);
+    int startThread(int port, ClientHandler *clientHandler);
     void stop();
 };
 

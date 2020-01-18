@@ -3,14 +3,16 @@
 //
 
 #include "MySerialServer.h"
-#include "MyTestClientHandler.h"
 #include <sys/socket.h>
-#include <string>
 #include <iostream>
 #include <unistd.h>
 #include <netinet/in.h>
+#include <thread>
 
 int MySerialServer::start(int port, ClientHandler *clientHandler) {
+    thread(&MySerialServer::startThread, this, port,clientHandler).join();
+}
+int MySerialServer::startThread(int port, ClientHandler *clientHandler) {
     //create socket
     int socketfd = socket(AF_INET, SOCK_STREAM, 0);
     if (socketfd == -1) {
@@ -61,7 +63,6 @@ int MySerialServer::start(int port, ClientHandler *clientHandler) {
     }
     close(socketfd); //closing the listening socket
 }
-
 void MySerialServer::stop() {
     shouldStop = true;
 }
