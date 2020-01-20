@@ -5,10 +5,20 @@
 #ifndef DFS_BESTFIRSTSEARCH_H
 #define DFS_BESTFIRSTSEARCH_H
 
+#include "State.h"
+#include "Searchable.h"
+#include <queue>
+#include <string>
 
+using namespace std;
+
+template <class T>
 class BestFirstSearch {
-private:
-
+    queue<State<T>> openList;
+    void sortOpenList();
+    string backTrace();
+public:
+    string search(Searchable<T> searchable);
 };
 
 

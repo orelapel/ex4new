@@ -10,13 +10,11 @@ BfsSearch::BfsSearch(int V)
     adj = new list<int>[V];
 }
 
-void BfsSearch::addEdge(int v, int w)
-{
+void BfsSearch::addEdge(int v, int w) {
     adj[v].push_back(w); // Add w to v’s list.
 }
 
-void BfsSearch::BFS(int s)
-{
+void BfsSearch::BFS(int s) {
     // Mark all the vertices as not visited
     bool *visited = new bool[V];
     for(int i = 0; i < V; i++)

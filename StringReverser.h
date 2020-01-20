@@ -12,7 +12,7 @@
 #include <algorithm>
 
 using namespace std;
-class StringReverser : public Solver{
+class StringReverser : public Solver<string,string>{
 public:
     string solve(string s);
     ~StringReverser();

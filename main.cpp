@@ -14,10 +14,11 @@ public:
     static int main(int port) {
         try {
             MySerialServer *mySerial = new MySerialServer();
-            StringReverser *reverser = new StringReverser();
-            CacheManager<string> *fileCashe = new FileCacheManager<string>(10);
-            ClientHandler *ch = new MyTestClientHandler(reverser, fileCashe);
-            mySerial->start(port, ch);
+//            StringReverser *reverser = new StringReverser();
+
+            CacheManager<string,string> *fileCashe = new FileCacheManager<string,string>(10);
+//            ClientHandler *ch = new MyTestClientHandler(reverser, fileCashe);
+//            mySerial->start(port, ch);
             mySerial->stop();
             return 0;
         }
