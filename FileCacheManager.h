@@ -7,18 +7,18 @@
 #include "CacheManager.h"
 #include "string"
 
-template <typename T>
-class FileCacheManager:public CacheManager<T> {
+template <class Problem, class Solution>
+class FileCacheManager:public CacheManager<Problem,Solution> {
 private:
-    list <string> listOfCashe;
-    unordered_map<std::string,std::pair<T, std::list<string>::iterator>> _cashe;
+    list <Problem> listOfCashe;
+    unordered_map<Problem,std::pair<Solution, typename std::list<Problem>::iterator>> _cashe;
     unsigned int capacityRam;
 public:
     FileCacheManager(unsigned int capacity){
         capacityRam=capacity;
     }
 
-    void insert(string key, T obj) {
+    void insert(string key, Solution obj) {
         fstream fileForWriteObj;
         string file_name = key+".txt";
         fileForWriteObj.open(file_name,ios::out|ios::binary);
@@ -27,8 +27,8 @@ public:
             throw("Error in creating file");
         }
         //write the object for file
-//        fileForWriteObj.write((char*)&obj,sizeof(obj));
-        fileForWriteObj<<obj<<endl;
+        fileForWriteObj.write((char*)&obj,sizeof(obj));
+//        fileForWriteObj<<obj<<endl;
         fileForWriteObj.close();
         //for update the data of the object
         if (_cashe.find(key) != _cashe.end()) {
@@ -46,11 +46,11 @@ public:
                 listOfCashe.remove(lastValueInList);
                 _cashe.erase (lastValueInList);
             }
-            _cashe.insert( pair<std::string,std::pair<T, std::list<string>::iterator>> (key,std::make_pair(obj,listOfCashe.begin())));
+            _cashe.insert( pair<Problem,std::pair<Solution, typename std::list<Problem>::iterator>> (key,std::make_pair(obj,listOfCashe.begin())));
         }
     }
 
-    T get(string key) {
+    Solution get(Problem key) {
         // if the object exist in the map we will find it in the map, return it and update his use in the data
         if (_cashe.find(key) != _cashe.end()) {
             listOfCashe.remove(key);
@@ -62,14 +62,14 @@ public:
             fstream fileForReadObj;
             string file_name = key+".txt";
             fileForReadObj.open(file_name,ios::in|ios::binary);
-            T obj;
+            Solution obj;
             //if the file not found or from any reason the program failed in open it- we will throw an error
             if(!fileForReadObj){
                 throw("error in find the object");
             }
             else {
-//                fileForReadObj.read((char*)&obj,sizeof(obj));
-                getline(fileForReadObj, obj);
+                fileForReadObj.read((char*)&obj,sizeof(obj));
+//                getline(fileForReadObj, obj);
                 fileForReadObj.close();
                 //insert the value to the Ram
                 insert(key,obj);
@@ -78,13 +78,13 @@ public:
         }
     }
 
-    void foreach(void (*func)(T &obj)) {
+    void foreach(void (*func)(Solution &obj)) {
         for (std::list<string>::iterator it=listOfCashe.begin(); it != listOfCashe.end(); ++it) {
             func(_cashe[*it].first);
         }
     }
 
-    bool isSoulutaionExist(T key){
+    bool isSoulutaionExist(Problem key){
         if (_cashe.find(key) != _cashe.end()) {
             return true;
         }
@@ -92,7 +92,7 @@ public:
             fstream fileForReadObj;
             string file_name = key+".txt";
             fileForReadObj.open(file_name,ios::in|ios::binary);
-            T obj;
+            Solution obj;
             //if the file not found or from any reason the program failed in open it- we will throw an error
             if(!fileForReadObj){
                 return false;

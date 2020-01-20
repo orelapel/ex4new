@@ -12,10 +12,10 @@
 #include "FileCacheManager.h"
 
 //template <class Solution, class Problem>
- void MyTestClientHandler::handleClient(int socket) {
+void MyTestClientHandler::handleClient(int socket) {
      char buffer[1]={0};
      string line;
-    CacheManager<string> *cache = new FileCacheManager<string>(10);
+    CacheManager<string,string> *cache = new FileCacheManager<string,string>(10);
      while(read( socket , buffer, 1)>0){
          while(buffer[0]!='\n') {
              line += buffer[0];
@@ -35,7 +35,7 @@
              send(socket,lineToChar,length+1,0);
              cout<<sol<<endl;
          } else {
-             Solver *stringReverse = new StringReverser();
+             Solver<string,string> *stringReverse = new StringReverser();
              string sol = stringReverse->solve(line);
              cache->insert(line, sol);
              int length = sol.length();
