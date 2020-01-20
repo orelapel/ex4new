@@ -57,7 +57,7 @@ public:
             listOfCashe.push_front(key);
             return _cashe[key].first ;
         }
-            //else we will search him in the files - if we find we will read the file into object and return this object
+            ///else we will search him in the files - if we find we will read the file into object and return this object
         else {
             fstream fileForReadObj;
             string file_name = key+".txt";
