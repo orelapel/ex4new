@@ -22,7 +22,8 @@ public:
 
     void insert(Problem key, string obj) {
         fstream fileForWriteObj;
-        string file_name = hash<Problem>(key)+".txt";
+        hash<Problem> hash;
+        string file_name = hash(key)+".txt";
         fileForWriteObj.open(file_name,ios::out|ios::binary);
         //if from any reason the program failed in open the file we will throw an error
         if(!fileForWriteObj){
@@ -44,7 +45,7 @@ public:
             //If we add another object and go beyond the existing memory limit we will
             // removed the Least Recently Used
             if (listOfCashe.size()>capacityRam) {
-                string lastValueInList =listOfCashe.back();
+                Problem lastValueInList =listOfCashe.back();
                 listOfCashe.remove(lastValueInList);
                 _cashe.erase (lastValueInList);
             }
@@ -62,7 +63,8 @@ public:
             //else we will search him in the files - if we find we will read the file into object and return this object
         else {
             fstream fileForReadObj;
-            string file_name = hash<Problem>(key)+".txt";
+            hash<Problem> hash;
+            string file_name = hash(key)+".txt";
             fileForReadObj.open(file_name,ios::in|ios::binary);
             string obj;
             //if the file not found or from any reason the program failed in open it- we will throw an error
@@ -81,7 +83,7 @@ public:
     }
 
     void foreach(void (*func)(string &obj)) {
-        for (std::list<string>::iterator it=listOfCashe.begin(); it != listOfCashe.end(); ++it) {
+        for (typename std::list<Problem>::iterator it=listOfCashe.begin(); it != listOfCashe.end(); ++it) {
             func(_cashe[*it].first);
         }
     }
@@ -92,7 +94,8 @@ public:
         }
         else {
             fstream fileForReadObj;
-            string file_name = hash<Problem>(key)+".txt";
+            hash<Problem> hash;
+            string file_name = hash(key)+".txt";
             fileForReadObj.open(file_name,ios::in|ios::binary);
             string obj;
             //if the file not found or from any reason the program failed in open it- we will throw an error
