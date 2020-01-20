@@ -3,6 +3,7 @@
 //
 
 #include "BestFirstSearch.h"
+#include "Point.h"
 #include <unordered_set>
 #include <algorithm>
 #include <stack>
@@ -11,18 +12,18 @@
 using namespace std;
 
 template <class T>
-string BestFirstSearch<T>::search(Searchable<T> searchable) {
-    openList.push(searchable.getInitialState());
-    searchable.getInitialState()->setTraceCost(searchable.getInitialState()->getCost());
+string BestFirstSearch<T>::search(Searchable<T>* searchable) {
+    openList.push(searchable->getInitialState());
+    searchable->getInitialState()->setTraceCost(searchable->getInitialState()->getCost());
     unordered_set<State<T>> closed = new unordered_set<State<T>>();
     while (openList.size()>0){
         sortOpenList();
         State<T> n = openList.pop();
         closed.insert(n);
-        if (searchable.isGoalState(n)) {
-            return ""; // backTrace
+        if (searchable->isGoalState(n)) {
+            return backTrace();
         }
-        vector<State<T>> succerssors = searchable.getAllPosibleState();
+        vector<State<T>> succerssors = searchable->getAllPosibleState();
         for (typename std::vector<State<T>>::iterator it = succerssors.begin(); it != succerssors.end(); ++it) {
             if (closed.find(*it) == closed.end() && find(openList.begin(), openList.end(), (*it)) == openList.end()) {
                 openList.push(*it);
@@ -86,6 +87,11 @@ void BestFirstSearch<T>::sortOpenList() {
 }
 
 template <class T>
-string BestFirstSearch<T>::backTrace() {
-
+string BestFirstSearch<T>::backTrace(unordered_set<State<T>> closed) {
+    string trace = "";
+    for (typename std::set<State<T>>::iterator it=closed.begin(); it!=closed.end(); ++it) {
+        Point* p = (*it).getCameFromState();
+        trace += p->toString();
+    }
+    return trace;
 }

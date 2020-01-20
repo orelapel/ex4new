@@ -12,14 +12,14 @@
 #include "unordered_map"
 using namespace std;
 
-template <class Problem,class Solution>
+template <class Problem>
 class CacheManager {
 public:
-    virtual void insert(Problem key, Solution obj) = 0;
+    virtual void insert(Problem key, string obj) = 0;
 
-    virtual Solution get(Problem key) =0;
+    virtual string get(Problem key) =0;
 
-    virtual void foreach(void (*func)(Solution &obj))=0;
+    virtual void foreach(void (*func)(string &obj))=0;
 
     virtual bool isSoulutaionExist(Problem key)=0;
 };

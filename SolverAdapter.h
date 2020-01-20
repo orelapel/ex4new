@@ -9,13 +9,15 @@
 #include "Searchable.h"
 #include "Point.h"
 #include "Searcher.h"
+#include "Solver.h"
 
-class SolverAdapter {
+class SolverAdapter:Solver<vector<vector<double>>*, string> {
 private:
     Searcher<Point> *searcher;
+    Point *initialP, *goalP;
 public:
     SolverAdapter(Searcher<Point> *s);
-    string solve(vector<vector<double>> Matrix);
+    string solve(vector<vector<double>>* Matrix);
 };
 
 

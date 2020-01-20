@@ -4,7 +4,7 @@
 
 #include "Matrix.h"
 
-Matrix::Matrix(vector<vector<double>> matrixProblem,State<Point>*intialState,State<Point>*goalState) {
+Matrix::Matrix(vector<vector<double>>* matrixProblem,Point* intialState,Point* goalState) {
     matrix = matrixProblem;
     initial = intialState;
     goal = goalState;
@@ -12,23 +12,25 @@ Matrix::Matrix(vector<vector<double>> matrixProblem,State<Point>*intialState,Sta
 
 void Matrix::initialStateMatrix() {
     int i=0,j;
-    for (std::vector<vector<double>>::iterator it = matrix.begin(); it != matrix.end(); ++it) {
+    for (std::vector<vector<double>>::iterator it = matrix->begin(); it != matrix->end(); ++it) {
         j=0;
         vector<State<Point>*> stateVector;
         for (std::vector<double>::iterator itIn = (*it).begin(); itIn != (*it).end(); ++itIn) {
             stateVector.push_back(new State<Point>(new Point(i,j), NULL, (*itIn)));
             j++;
         }
+        stateMatrix.push_back(stateVector);
         i++;
     }
 }
 
 State<Point>* Matrix::getInitialState() {
-    return initial;
+    int i = initial->getX(), j= initial->getY();
+    return (stateMatrix[i])[j];
 }
 
 bool Matrix::isGoalState(State<Point>* state) {
-    return goal->getState() == state->getState();
+    return goal == state->getState();
 }
 
 vector<State<Point> *> Matrix::getAllPosibleState(State<Point> *state) {
