@@ -24,7 +24,7 @@ public:
             CacheManager<Matrix*> *fileCashe = new FileCacheManager<Matrix*>(10);
             ClientHandler *ch = new MyClientHandler(fileCashe,solverAdapter);
             mySerial->start(port,ch);
-
+//
 
 //            Solver<vector<vector<vector<double>>*, string> = new SolverAdapter();
 //            StringReverser *reverser = new StringReverser();

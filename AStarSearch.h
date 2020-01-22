@@ -81,7 +81,7 @@ class AStarSearch: public Searcher<T>{
 
     double getF(State<T>* curr, State<T>* goal) {
         return getH(curr, goal) + curr->getTraceCost();
-    }
+    }//
 public:
     string search(Searchable<T>* searchable) {
         State<T>* init = searchable->getInitialState();
