@@ -18,9 +18,9 @@ void MyClientHandler::handleClient(int socket) {
     char* value;
     int i=0,j=0;
     bool isFirst = true;
-    pair<int,int> initState, goalState;
+    Point *initState, *goalState;
     vector<string> lines;
-    CacheManager<string,string> *cache = new FileCacheManager<string,string>(10);
+    CacheManager<string> *cache = new FileCacheManager<string>(10);
     while(read( socket , buffer, 1)>0){
         while(buffer[0]!='\n') {
             line += buffer[0];
@@ -33,10 +33,12 @@ void MyClientHandler::handleClient(int socket) {
         if (strcmp(lineChar,"end")==0){
             break;
         } else if (len == 3 && isFirst) {
-            initState = std::make_pair(lineChar[0]-'0', lineChar[2]-'0') ;
+//            initState = std::make_pair(lineChar[0]-'0', lineChar[2]-'0') ;
+            initState = new Point(lineChar[0]-'0', lineChar[2]-'0');
             isFirst = false;
         } else if (len == 3 && !isFirst){
-            goalState = std::make_pair(lineChar[0]-'0', lineChar[2]-'0') ;
+            initState = new Point(lineChar[0]-'0', lineChar[2]-'0');
+//            goalState = std::make_pair(lineChar[0]-'0', lineChar[2]-'0') ;
         }
 //        if (cache->isSoulutaionExist(line)){
 //            string sol = cache->get(line);
@@ -57,9 +59,9 @@ void MyClientHandler::handleClient(int socket) {
 //        }
         line = "";
     }
-    vector<vector<int>> matrix;
+    vector<vector<double>>* matrix;
     for (std::vector<string>::iterator it = lines.begin(); it != lines.end(); ++it) {
-        vector<int> lineVector;
+        vector<double> lineVector;
         int lenLine = (*it).length();
         char lineInt[lenLine+1];
         strcpy(lineInt,line.c_str());
@@ -68,6 +70,7 @@ void MyClientHandler::handleClient(int socket) {
             lineVector.push_back(stoi(value));
             value = strtok(NULL, " ,");
         }
-        matrix.push_back(lineVector);
+        matrix->push_back(lineVector);
     }
+    solver->solve(new Matrix(matrix, initState,goalState));
 }

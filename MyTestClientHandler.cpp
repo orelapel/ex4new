@@ -15,7 +15,7 @@
 void MyTestClientHandler::handleClient(int socket) {
      char buffer[1]={0};
      string line;
-    CacheManager<string,string> *cache = new FileCacheManager<string,string>(10);
+    CacheManager<string> *cache = new FileCacheManager<string>(10);
      while(read( socket , buffer, 1)>0){
          while(buffer[0]!='\n') {
              line += buffer[0];

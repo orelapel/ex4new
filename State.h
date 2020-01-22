@@ -5,6 +5,8 @@
 #ifndef EX4_STATE_H
 #define EX4_STATE_H
 #include <limits>
+#include "string"
+using namespace std;
 
 template <class T>
 class State{
@@ -33,6 +35,9 @@ public:
     }
     double getTraceCost(){
         return traceCost;
+    }
+    T* getCameFromState(){
+        return cameFrom->getState();
     }
 };
 

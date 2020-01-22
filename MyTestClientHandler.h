@@ -13,10 +13,10 @@
 //template <class Problem, class Solution>
 class MyTestClientHandler: public ClientHandler {
     Solver<string ,string> *solve;
-    CacheManager<string,string> *cashe;
+    CacheManager<string> *cashe;
 public:
     void handleClient(int socket);
-    MyTestClientHandler(Solver<string,string> *solver, CacheManager<string,string> *myCashe) {
+    MyTestClientHandler(Solver<string,string> *solver, CacheManager<string> *myCashe) {
         solve = solver;
         cashe = myCashe;
     }

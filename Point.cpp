@@ -19,3 +19,6 @@ void Point::setX(int numX){
 void Point::setY(int numY) {
     y = numY;
 }
+string Point::toString() {
+    return "(" + to_string(x) + "," + to_string(y)+")";
+}

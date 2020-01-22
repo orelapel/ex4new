@@ -5,6 +5,8 @@
 #ifndef EX4_POINT_H
 #define EX4_POINT_H
 
+#include "string"
+using namespace std;
 
 class Point {
 private:
@@ -16,7 +18,7 @@ public:
     int getY();
     void setX(int numX);
     void setY(int numY);
+    string toString();
 };
-
 
 #endif //EX4_POINT_H

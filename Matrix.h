@@ -11,18 +11,16 @@
 
 class Matrix:public Searchable<Point> {
 private:
-    vector<vector<double>> matrix;
+    vector<vector<double>>* matrix;
     vector<vector<State<Point>*>> stateMatrix;
-    State<Point> *initial;
-    State<Point> *goal;
+    Point *initial;
+    Point *goal;
 public:
-    Matrix(vector<vector<double>> matrixProblem,State<Point>*intialState,State<Point>*goalState);
+    Matrix(vector<vector<double>>* matrixProblem,Point* intialState,Point* goalState);
     void initialStateMatrix();
     State<Point>* getInitialState();
     bool isGoalState(State<Point>* state);
     vector<State<Point>*> getAllPosibleState(State<Point>* state);
 };
-
-
 
 #endif //EX4_MATRIX_H

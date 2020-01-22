@@ -6,29 +6,32 @@
 #define EX4_FILECACHEMANAGER_H
 #include "CacheManager.h"
 #include "string"
+#include <functional>
+using namespace std;
 
-template <class Problem, class Solution>
-class FileCacheManager:public CacheManager<Problem,Solution> {
+template <class Problem>
+class FileCacheManager:public CacheManager<Problem> {
 private:
     list <Problem> listOfCashe;
-    unordered_map<Problem,std::pair<Solution, typename std::list<Problem>::iterator>> _cashe;
+    unordered_map<Problem,std::pair<string, typename std::list<Problem>::iterator>> _cashe;
     unsigned int capacityRam;
 public:
     FileCacheManager(unsigned int capacity){
         capacityRam=capacity;
     }
 
-    void insert(string key, Solution obj) {
+    void insert(Problem key, string obj) {
         fstream fileForWriteObj;
-        string file_name = key+".txt";
+        hash<Problem> hash;
+        string file_name = hash(key)+".txt";
         fileForWriteObj.open(file_name,ios::out|ios::binary);
         //if from any reason the program failed in open the file we will throw an error
         if(!fileForWriteObj){
             throw("Error in creating file");
         }
         //write the object for file
-        fileForWriteObj.write((char*)&obj,sizeof(obj));
-//        fileForWriteObj<<obj<<endl;
+//        fileForWriteObj.write((char*)&obj,sizeof(obj));
+        fileForWriteObj<<obj<<endl;
         fileForWriteObj.close();
         //for update the data of the object
         if (_cashe.find(key) != _cashe.end()) {
@@ -42,15 +45,15 @@ public:
             //If we add another object and go beyond the existing memory limit we will
             // removed the Least Recently Used
             if (listOfCashe.size()>capacityRam) {
-                string lastValueInList =listOfCashe.back();
+                Problem lastValueInList =listOfCashe.back();
                 listOfCashe.remove(lastValueInList);
                 _cashe.erase (lastValueInList);
             }
-            _cashe.insert( pair<Problem,std::pair<Solution, typename std::list<Problem>::iterator>> (key,std::make_pair(obj,listOfCashe.begin())));
+            _cashe.insert( pair<Problem,std::pair<string, typename std::list<Problem>::iterator>> (key,std::make_pair(obj,listOfCashe.begin())));
         }
     }
 
-    Solution get(Problem key) {
+    string get(Problem key) {
         // if the object exist in the map we will find it in the map, return it and update his use in the data
         if (_cashe.find(key) != _cashe.end()) {
             listOfCashe.remove(key);
@@ -60,16 +63,17 @@ public:
             ///else we will search him in the files - if we find we will read the file into object and return this object
         else {
             fstream fileForReadObj;
-            string file_name = key+".txt";
+            hash<Problem> hash;
+            string file_name = hash(key)+".txt";
             fileForReadObj.open(file_name,ios::in|ios::binary);
-            Solution obj;
+            string obj;
             //if the file not found or from any reason the program failed in open it- we will throw an error
             if(!fileForReadObj){
                 throw("error in find the object");
             }
             else {
-                fileForReadObj.read((char*)&obj,sizeof(obj));
-//                getline(fileForReadObj, obj);
+//                fileForReadObj.read((char*)&obj,sizeof(obj));
+                getline(fileForReadObj, obj);
                 fileForReadObj.close();
                 //insert the value to the Ram
                 insert(key,obj);
@@ -78,8 +82,8 @@ public:
         }
     }
 
-    void foreach(void (*func)(Solution &obj)) {
-        for (std::list<string>::iterator it=listOfCashe.begin(); it != listOfCashe.end(); ++it) {
+    void foreach(void (*func)(string &obj)) {
+        for (typename std::list<Problem>::iterator it=listOfCashe.begin(); it != listOfCashe.end(); ++it) {
             func(_cashe[*it].first);
         }
     }
@@ -90,9 +94,10 @@ public:
         }
         else {
             fstream fileForReadObj;
-            string file_name = key+".txt";
+            hash<Problem> hash;
+            string file_name = hash(key)+".txt";
             fileForReadObj.open(file_name,ios::in|ios::binary);
-            Solution obj;
+            string obj;
             //if the file not found or from any reason the program failed in open it- we will throw an error
             if(!fileForReadObj){
                 return false;

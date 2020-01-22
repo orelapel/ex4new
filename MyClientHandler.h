@@ -9,12 +9,12 @@
 #include "ClientHandler.h"
 #include "CacheManager.h"
 #include "Matrix.h"
+#include "Solver.h"
 
 class MyClientHandler: public ClientHandler {
 private:
-    CacheManager<Matrix,string> *cache;
-
-
+    CacheManager<Matrix*> *cache;
+    Solver<Matrix*,string> *solver;
 public:
     void handleClient(int socket);
 };
