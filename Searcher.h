@@ -10,7 +10,7 @@
 
 
 template <class T>
-class Searcher:public Searchable<T>{
+class Searcher{
 public:
     virtual string search(Searchable<T>* searchable)=0;
     virtual int getNumOfNodesEvaluated()=0;

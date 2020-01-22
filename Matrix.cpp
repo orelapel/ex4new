@@ -4,19 +4,19 @@
 
 #include "Matrix.h"
 
-Matrix::Matrix(vector<vector<double>>* matrixProblem,Point* intialState,Point* goalState) {
+Matrix::Matrix(vector<vector<double>> matrixProblem, Point* pInit, Point* pGoal) {
     matrix = matrixProblem;
-    initial = intialState;
-    goal = goalState;
+    initial = pInit;
+    goal = pGoal;
 }
 
 void Matrix::initialStateMatrix() {
     int i=0,j;
-    for (std::vector<vector<double>>::iterator it = matrix->begin(); it != matrix->end(); ++it) {
+    for (std::vector<vector<double>>::iterator it = matrix.begin(); it != matrix.end(); ++it) {
         j=0;
-        vector<State<Point>*> stateVector;
+        vector<State<Point*>*> stateVector;
         for (std::vector<double>::iterator itIn = (*it).begin(); itIn != (*it).end(); ++itIn) {
-            stateVector.push_back(new State<Point>(new Point(i,j), NULL, (*itIn)));
+            stateVector.push_back(new State<Point*>(new Point(i,j), NULL, (*itIn)));
             j++;
         }
         stateMatrix.push_back(stateVector);
@@ -24,39 +24,46 @@ void Matrix::initialStateMatrix() {
     }
 }
 
-State<Point>* Matrix::getInitialState() {
+State<Point*>* Matrix::getInitialState() {
     int i = initial->getX(), j= initial->getY();
     return (stateMatrix[i])[j];
 }
 
-bool Matrix::isGoalState(State<Point>* state) {
-    return goal == state->getState();
+State<Point*>* Matrix::getGoalState() {
+    int i = goal->getX(), j= goal->getY();
+    return (stateMatrix[i])[j];
 }
 
-vector<State<Point> *> Matrix::getAllPosibleState(State<Point> *state) {
-    vector<State<Point>*> allNeigth;
+bool Matrix::isGoalState(State<Point*>* state) {
+    return ((state->getState()->getX() == (matrix.size()-1))
+    && (state->getState()->getY()) == (matrix.front().size()));
+//    return goal == state->getState();
+}
+
+vector<State<Point*> *> Matrix::getAllPosibleState(State<Point*> *state) {
+    vector<State<Point*>*> allNeigth;
     int i = state->getState()->getX(), j = state->getState()->getY();
     // create the states of the neighbors
-    if (j+1<stateMatrix.front().size()){
-        State<Point>* rightState = (stateMatrix[i])[j+1];
+    if (j+1<stateMatrix.front().size() && (matrix[i])[j+1] != -1){
+        State<Point*>* rightState = (stateMatrix[i])[j+1];
         rightState->setCameFrom(state);
         rightState->setTraceCost(state->getTraceCost() + rightState->getCost());
         allNeigth.push_back(rightState);
     }
-    if (j-1 >=0){
-        State<Point>* leftState = (stateMatrix[i])[j-1];
+    if (j-1 >=0 && (matrix[i])[j-1] != -1){
+        State<Point*>* leftState = (stateMatrix[i])[j-1];
         leftState->setCameFrom(state);
         leftState->setTraceCost(state->getTraceCost() + leftState->getCost());
         allNeigth.push_back(leftState);
     }
-    if (i-1 >=0){
-        State<Point>* upState = (stateMatrix[i-1])[j];
+    if (i-1 >=0 && (matrix[i-1])[j] != -1){
+        State<Point*>* upState = (stateMatrix[i-1])[j];
         upState->setCameFrom(state);
         upState->setTraceCost(state->getTraceCost() + upState->getCost());
         allNeigth.push_back(upState);
     }
-    if (i+1 < stateMatrix.size()){
-        State<Point>* downState = (stateMatrix[i+1])[j];
+    if (i+1 < stateMatrix.size() && (matrix[i+1])[j] != -1){
+        State<Point*>* downState = (stateMatrix[i+1])[j];
         downState->setCameFrom(state);
         downState->setTraceCost(state->getTraceCost() + downState->getCost());
         allNeigth.push_back(downState);

@@ -13,15 +13,15 @@ class State{
     double cost;
     double traceCost;
     State<T>* cameFrom;
-    T* myState;
+    T myState;
 public:
-    State(T* state, State<T>* s, double c) {
+    State(T state, State<T>* s, double c) {
         myState = state;
         cameFrom = s;
         cost = c;
         traceCost = std::numeric_limits<int>::max();
     }
-    T* getState(){
+    T getState() {
         return myState;
     }
     double getCost(){
@@ -36,7 +36,7 @@ public:
     double getTraceCost(){
         return traceCost;
     }
-    T* getCameFromState(){
+    T getCameFromState() {
         return cameFrom->getState();
     }
 };
