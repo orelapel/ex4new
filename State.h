@@ -12,6 +12,7 @@ template <class T>
 class State{
     double cost;
     double traceCost;
+    double fAstar;
     State<T>* cameFrom;
     T myState;
 public:
@@ -20,6 +21,13 @@ public:
         cameFrom = s;
         cost = c;
         traceCost = std::numeric_limits<int>::max();
+        fAstar = std::numeric_limits<int>::max();
+    }
+    void setF(double f){
+        fAstar = f;
+    }
+    double getF(){
+        return fAstar;
     }
     T getState() {
         return myState;
@@ -39,6 +47,10 @@ public:
     T getCameFromState() {
         return cameFrom->getState();
     }
+    State<T>* getCameFrom(){
+        return cameFrom;
+    };
+
 };
 
 #endif //EX4_STATE_H

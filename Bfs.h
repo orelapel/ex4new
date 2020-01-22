@@ -21,9 +21,9 @@ private:
     //check i do nothing with this
     double costOfTrace;
 public:
-    void  createPath(State<T> *Goal,Searchable<T> searchable) {
+    string createPath(Searchable<T>* searchable) {
         string path = "";
-        State<T> *currentState = Goal;
+        State<T> *currentState = searchable->getGoalState();
         stack<string> stackForPath;
         int i = currentState->getState()->getX();
         int j = currentState->getState()->getY();
@@ -56,13 +56,14 @@ public:
             //remove this element from the stack after we use it
             stackForPath.pop();
         }
+        return path;
     }
 
-    string Search(Searchable<T> searchable) {
+    string search(Searchable<T>* searchable) {
         numberOfStates=0;
         queue<State<T>> queueForBfs;
         State<T> *curr;
-        curr = searchable.getInitialState();;
+        curr = searchable->getInitialState();;
         curr->setTraceCost(curr->getCost());
         queueForBfs.push(curr);
         vector<State<T>*> isColored;
@@ -72,7 +73,7 @@ public:
             numberOfStates++;
             queueForBfs.pop();
             isColored.push_back(curr);
-            succerssors = searchable.getAllPosibleState(curr);
+            succerssors = searchable->getAllPosibleState(curr);
             for (State<T>* succerssor:succerssors){
                 if ((std::find(isColored.begin(), isColored.end(), succerssor) != isColored.end())&&(succerssor->getCost()!=-1)) {
                     if(!isgoalState(succerssor)) {
@@ -81,13 +82,13 @@ public:
                         queueForBfs.push(succerssor);
                     }
                     else {
-                        curr = succerssor;
+                        //curr = succerssor;
                         break;
                     }
                 }
             }
         }
-        createPath(curr,searchable);
+        return createPath(searchable);
     }
     int getNumOfNodesEvaluated() {
         return numberOfStates;

@@ -64,15 +64,15 @@ class BestFirstSearch: public Searcher<T> {
 //
 //        }
     }
-    string backTrace(unordered_set<State<T>*> closed){
-        string trace = "";
-        typename std::unordered_set<State<T>*>::iterator it;
-        for (it=closed.begin(); it!=closed.end(); ++it) {
-            Point* p = (*it)->getCameFromState();
-            trace += p->toString();
-        }
-        return trace;
-    }
+//    string backTrace(unordered_set<State<T>*> closed){
+//        string trace = "";
+//        typename std::unordered_set<State<T>*>::iterator it;
+//        for (it=closed.begin(); it!=closed.end(); ++it) {
+//            Point* p = (*it)->getCameFromState();
+//            trace += p->toString();
+//        }
+//        return trace;
+//    }
 public:
     string search(Searchable<T>* searchable) {
         State<T>* init = searchable->getInitialState();
@@ -85,7 +85,7 @@ public:
             closed.insert(n);
             if (searchable->isGoalState(n)) {
 //                cout<<backTrace(closed)<<endl;
-                return backTrace(closed);
+                return createPath(searchable);
             }
 
             vector<State<T>*> succerssors = searchable->getAllPosibleState(n);
@@ -110,6 +110,43 @@ public:
                 }
             }
         }
+    }
+    string createPath(Searchable<T>* searchable) {
+        string path = "";
+        State<T> *currentState = searchable->getGoalState();
+        stack<string> stackForPath;
+        int i = currentState->getState()->getX();
+        int j = currentState->getState()->getY();
+        int iCameFrom,jCameFrom;
+//        while (currentState!=searchable.getInitialState()) {
+        while (currentState !=nullptr && currentState->getCameFrom()!= nullptr){
+            path = path+"(" + to_string(currentState->getTraceCost()) +"),";
+            currentState = currentState->getCameFrom();
+            iCameFrom = currentState->getState()->getX();
+            jCameFrom = currentState->getState()->getY();
+            if (i<iCameFrom){
+                path = "Up ";
+            }
+            else if (i>iCameFrom){
+                path = "Down ";
+            }
+            else if (j<jCameFrom){
+                path = "Left ";
+            }
+            else if(j>jCameFrom){
+                path = "Right ";
+            }
+            stackForPath.push(path);
+            path="";
+        }
+        string returnString="";
+        while(!stackForPath.empty()) {
+            //add to the string of the path we return back
+            returnString = returnString + stackForPath.top();
+            //remove this element from the stack after we use it
+            stackForPath.pop();
+        }
+        return path;
     }
     int getNumOfNodesEvaluated(){
         return closed.size();

@@ -33,7 +33,7 @@ class AStarSearch: public Searcher<T>{
             int n = openList.size();
             for (int j = 0; j < n; j++) {
                 currState = openList.front();
-                curr = currState->getTraceCost();
+                curr = currState->getF();
                 openList.pop_front();
 
                 if (curr <= min_val && j <= openList.size() - i) {
@@ -48,7 +48,7 @@ class AStarSearch: public Searcher<T>{
             for (int i = 0; i < n; i++)
             {
                 currState = openList.front();
-                curr = currState->getTraceCost();
+                curr = currState->getF();
                 openList.pop_front();
                 if (i != min_index)
                     openList.push_front(currState);
@@ -79,26 +79,31 @@ class AStarSearch: public Searcher<T>{
         return sqrt(pow(x1-x2,2)+pow(y1-y2,2));
     }
 
-    double getF(State<T>* curr, State<T>* goal) {
-        return getH(curr, goal) + curr->getTraceCost();
-    }//
+//    double getF(State<T>* curr, State<T>* goal) {
+//        return getH(curr, goal) + curr->getTraceCost();
+//    }
 public:
     string search(Searchable<T>* searchable) {
         State<T>* init = searchable->getInitialState();
+        State<T>* goal = searchable->getGoalState();
+        init->setTraceCost(searchable->getInitialState()->getCost());
+        double hInit = getH(init, goal);
+        init->setF(init->getTraceCost() + hInit);
         openList.push_back(init);
-        searchable->getInitialState()->setTraceCost(searchable->getInitialState()->getCost());
         while (openList.size()>0) {
             sortOpenList();
             State<T>* n = openList.front();
             openList.pop_front();
             closed.insert(n);
             if (searchable->isGoalState(n)) {
-                return backTrace(closed);
+                return createPath(searchable);
             }
             vector<State<T>*> succerssors = searchable->getAllPosibleState(n);
             for (typename std::vector<State<T>*>::iterator it = succerssors.begin(); it != succerssors.end(); ++it) {
                 if (closed.find(*it) == closed.end() && find(openList.begin(), openList.end(), (*it)) == openList.end()) {
-                    openList.push_back(*it);
+                    double hSucc = getH((*it),goal);
+                    (*it)->setF((*it)->getTraceCost() + hSucc);
+                    openList.push_front(*it);
                 } else if (find(openList.begin(), openList.end(), (*it)) != openList.end() && (*it)->getTraceCost() > n->getTraceCost() + (*it)->getCost()) {
                     stack<State<T>*> tempStack;
                     while (openList.front() != (*it)) {
@@ -107,13 +112,17 @@ public:
                     }
                     State<T>* temp = openList.front();
                     openList.pop_front();
-                    temp->setTraceCost(n->getTraceCost() + (*it)->getCost());
+                    temp->setF(n->getTraceCost() + (*it)->getCost());
                     temp->setCameFrom(n);
-                    openList.push_back(temp);
-                    while (!tempStack.empty()){
-                        openList.push_back(tempStack.top());
+                    openList.push_front(temp);
+                    while (!tempStack.empty()) {
+                        openList.push_front(tempStack.top());
                         tempStack.pop();
                     }
+                } else if (closed.find(*it) != closed.end() && (*it)->getTraceCost() > n->getTraceCost() + (*it)->getCost()){
+                    State<T>* temp = closed.find(*it);
+                    closed.erase(temp);
+                    openList.push_front(temp);
                 }
             }
         }

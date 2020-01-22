@@ -105,5 +105,5 @@ void MyClientHandler::handleClient(int socket) {
     }
     Matrix *matrixSearchabe = new Matrix(matrix, initState, goalState);
     matrixSearchabe->initialStateMatrix();
-    solver->solve(matrixSearchabe);
+    cout<<solver->solve(matrixSearchabe)<<endl;
 }
