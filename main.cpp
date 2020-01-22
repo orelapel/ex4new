@@ -1,11 +1,9 @@
 #include <iostream>
-#include <vector>
 #include "MySerialServer.h"
 #include "StringReverser.h"
 #include "CacheManager.h"
 #include "MyTestClientHandler.h"
 #include "FileCacheManager.h"
-#include "Matrix.h"
 
 namespace boot {
     class Main;
@@ -18,7 +16,7 @@ public:
             MySerialServer *mySerial = new MySerialServer();
 //            StringReverser *reverser = new StringReverser();
 
-            CacheManager<Matrix*> *fileCashe = new FileCacheManager<Matrix*>(10);
+            CacheManager<string,string> *fileCashe = new FileCacheManager<string,string>(10);
 //            ClientHandler *ch = new MyTestClientHandler(reverser, fileCashe);
 //            mySerial->start(port, ch);
             mySerial->stop();

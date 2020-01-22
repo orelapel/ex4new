@@ -7,6 +7,7 @@
 
 #include "State.h"
 #include "Searchable.h"
+#include "Searcher.h"
 #include <queue>
 #include <string>
 #include <unordered_set>
@@ -14,7 +15,7 @@
 using namespace std;
 
 template <class T>
-class BestFirstSearch {
+class BestFirstSearch:public Searcher<T> {
     queue<State<T>> openList;
     void sortOpenList();
     string backTrace(unordered_set<State<T>> closed);
