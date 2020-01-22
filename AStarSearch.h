@@ -1,9 +1,9 @@
 //
-// Created by noa on 19/01/2020.
+// Created by orelapel on 1/22/20.
 //
 
-#ifndef DFS_BESTFIRSTSEARCH_H
-#define DFS_BESTFIRSTSEARCH_H
+#ifndef EX4_ASTARSEARCH_H
+#define EX4_ASTARSEARCH_H
 
 #include "State.h"
 //#include "Searchable.h"
@@ -16,11 +16,10 @@
 #include <algorithm>
 #include <stack>
 #include <bits/stdc++.h>
-
 using namespace std;
 
 template <class T>
-class BestFirstSearch: public Searcher<T> {
+class AStarSearch: public Searcher<T>{
     deque<State<T>*> openList;
     unordered_set<State<T>*> closed;
     void sortOpenList(){
@@ -73,21 +72,29 @@ class BestFirstSearch: public Searcher<T> {
         }
         return trace;
     }
+
+    double getH(State<T>* curr, State<T>* goal) {
+        double x1 = curr->getState().getX(), y1 = curr->getState().getY();
+        double x2 = goal->getGoalState()->getState()->getX(), y2 = goal->getGoalState()->getState()->getY();
+        return sqrt(pow(x1-x2,2)+pow(y1-y2,2));
+    }
+
+    double getF(State<T>* curr, State<T>* goal) {
+        return getH(curr, goal) + curr->getTraceCost();
+    }//
 public:
     string search(Searchable<T>* searchable) {
         State<T>* init = searchable->getInitialState();
         openList.push_back(init);
         searchable->getInitialState()->setTraceCost(searchable->getInitialState()->getCost());
-        while (openList.size()>0){
+        while (openList.size()>0) {
             sortOpenList();
             State<T>* n = openList.front();
             openList.pop_front();
             closed.insert(n);
             if (searchable->isGoalState(n)) {
-//                cout<<backTrace(closed)<<endl;
                 return backTrace(closed);
             }
-
             vector<State<T>*> succerssors = searchable->getAllPosibleState(n);
             for (typename std::vector<State<T>*>::iterator it = succerssors.begin(); it != succerssors.end(); ++it) {
                 if (closed.find(*it) == closed.end() && find(openList.begin(), openList.end(), (*it)) == openList.end()) {
@@ -111,10 +118,9 @@ public:
             }
         }
     }
+
     int getNumOfNodesEvaluated(){
         return closed.size();
     }
 };
-
-
-#endif //DFS_BESTFIRSTSEARCH_H
+#endif //EX4_ASTARSEARCH_H

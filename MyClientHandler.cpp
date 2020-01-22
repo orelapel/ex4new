@@ -12,6 +12,10 @@
 #include "StringReverser.h"
 #include "FileCacheManager.h"
 
+MyClientHandler::MyClientHandler(CacheManager<Matrix *> *c, Solver<Matrix *, string> *s) {
+    cache = c;
+    solver = s;
+}
 void MyClientHandler::handleClient(int socket) {
     char buffer[1]={0};
     string line;
@@ -21,24 +25,19 @@ void MyClientHandler::handleClient(int socket) {
     Point *initState, *goalState;
     vector<string> lines;
     CacheManager<string> *cache = new FileCacheManager<string>(10);
-    while(read( socket , buffer, 1)>0){
+    bool stillData = true;
+    while(stillData && read( socket , buffer, 1)>0) {
         while(buffer[0]!='\n') {
             line += buffer[0];
             read( socket , buffer, 1);
         }
-        lines.push_back(line);
         int len = line.length();
         char lineChar[len+1];
         strcpy(lineChar,line.c_str());
         if (strcmp(lineChar,"end")==0){
-            break;
-        } else if (len == 3 && isFirst) {
-//            initState = std::make_pair(lineChar[0]-'0', lineChar[2]-'0') ;
-            initState = new Point(lineChar[0]-'0', lineChar[2]-'0');
-            isFirst = false;
-        } else if (len == 3 && !isFirst){
-            initState = new Point(lineChar[0]-'0', lineChar[2]-'0');
-//            goalState = std::make_pair(lineChar[0]-'0', lineChar[2]-'0') ;
+            stillData = false;
+        } else {
+            lines.push_back(line);
         }
 //        if (cache->isSoulutaionExist(line)){
 //            string sol = cache->get(line);
@@ -59,18 +58,52 @@ void MyClientHandler::handleClient(int socket) {
 //        }
         line = "";
     }
-    vector<vector<double>>* matrix;
+    initState = new Point(0,0);
+    goalState = new Point(0,0);
+    string pointGoal = lines.back();
+    int lenPoint = pointGoal.length();
+    char lineGoal[lenPoint+1];
+    strcpy(lineGoal,pointGoal.c_str());
+    char* x = strtok (lineGoal," ,"), *y;
+    if (x !=NULL) {
+        goalState->setX(stod(x));
+        y = strtok(NULL, " ,");
+        if (y!=NULL){
+            goalState->setY(stod(y));
+        }
+    }
+    lines.pop_back();
+    string pointInit = lines.back();
+    lenPoint = pointInit.length();
+    char lineInit[lenPoint+1];
+    strcpy(lineInit,pointInit.c_str());
+    x = strtok (lineInit," ,");
+    if (x !=NULL) {
+        initState->setX(stod(x));
+        y = strtok(NULL, " ,");
+        if (y!=NULL){
+            initState->setY(stod(y));
+        }
+    }
+    lines.pop_back();
+    // TODO check if always the matrix is squer
+    vector<vector<double>> matrix( lines.size() , vector<double> (lines.size()));
+    int index = 0;
     for (std::vector<string>::iterator it = lines.begin(); it != lines.end(); ++it) {
-        vector<double> lineVector;
         int lenLine = (*it).length();
         char lineInt[lenLine+1];
-        strcpy(lineInt,line.c_str());
-        value= strtok (lineInt," ,");
+        strcpy(lineInt,(*it).c_str());
+        value = strtok (lineInt," ,");
+        int k=0;
         while (value!=NULL) {
-            lineVector.push_back(stoi(value));
+            matrix[index][k]=(stod(value));
             value = strtok(NULL, " ,");
+            k++;
         }
-        matrix->push_back(lineVector);
+        index++;
+//        matrix->push_back(lineVector);
     }
-    solver->solve(new Matrix(matrix, initState,goalState));
+    Matrix *matrixSearchabe = new Matrix(matrix, initState, goalState);
+    matrixSearchabe->initialStateMatrix();
+    solver->solve(matrixSearchabe);
 }

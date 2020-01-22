@@ -16,6 +16,7 @@ private:
     CacheManager<Matrix*> *cache;
     Solver<Matrix*,string> *solver;
 public:
+    MyClientHandler(CacheManager<Matrix*> *c, Solver<Matrix*,string> *s);
     void handleClient(int socket);
 };
 

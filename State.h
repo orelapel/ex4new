@@ -5,27 +5,27 @@
 #ifndef EX4_STATE_H
 #define EX4_STATE_H
 #include <limits>
+#include "string"
+using namespace std;
+
 template <class T>
 class State{
     double cost;
     double traceCost;
     State<T>* cameFrom;
-    T* myState;
+    T myState;
 public:
-    State(T* state, State<T>* s, double c) {
+    State(T state, State<T>* s, double c) {
         myState = state;
         cameFrom = s;
         cost = c;
         traceCost = std::numeric_limits<int>::max();
     }
-    T* getState(){
+    T getState() {
         return myState;
     }
     double getCost(){
         return cost;
-    }
-    T* getCameFrom() {
-        return cameFrom;
     }
     void setCameFrom(State<T>* c){
         cameFrom = c;
@@ -35,6 +35,9 @@ public:
     }
     double getTraceCost(){
         return traceCost;
+    }
+    T getCameFromState() {
+        return cameFrom->getState();
     }
 };
 
