@@ -6,18 +6,25 @@
 #define EX4_SOLVERADAPTER_H
 
 
-#include "Searchable.h"
-#include "Point.h"
+//#include "Searchable.h"
+//#include "Point.h"
 #include "Searcher.h"
 #include "Solver.h"
 
-class SolverAdapter:Solver<vector<vector<double>>*, string> {
-private:
-    Searcher<Point> *searcher;
-    Point *initialP, *goalP;
+template <class T>
+class SolverAdapter:public Solver<Matrix*, string> {
+    Searcher<T> *searcher;
+    Matrix *searchable;
+//    Point *initialP, *goalP;
 public:
-    SolverAdapter(Searcher<Point> *s);
-    string solve(vector<vector<double>>* Matrix);
+    SolverAdapter(Searcher<T> *s):searcher(s){};
+    string solve(Matrix* prob) override {
+        setSearchable(prob);
+        return searcher->search(prob);
+    }
+    void setSearchable(Matrix *s){
+        searchable = s;
+    }
 };
 
 
