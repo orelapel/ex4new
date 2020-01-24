@@ -11,14 +11,14 @@
 #include "Matrix.h"
 #include "Solver.h"
 
+
 class MyClientHandler: public ClientHandler {
 private:
-    CacheManager<Matrix*> *cache;
+    CacheManager<string> *cache;
     Solver<Matrix*,string> *solver;
 public:
-    MyClientHandler(CacheManager<Matrix*> *c, Solver<Matrix*,string> *s);
-    void handleClient(int socket);
+    MyClientHandler(CacheManager<string> *c, Solver<Matrix*,string> *s);
+    void handleClient(int socket) override;
 };
-
 
 #endif //EX4_MYCLIENTHANDLER_H

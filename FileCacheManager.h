@@ -22,8 +22,9 @@ public:
 
     void insert(Problem key, string obj) {
         fstream fileForWriteObj;
-        hash<Problem> hash;
-        string file_name = hash(key)+".txt";
+        string file_name = key+".txt";
+//        hash<Problem> hash;
+//        string file_name = to_string(hash(key))+".txt";
         fileForWriteObj.open(file_name,ios::out|ios::binary);
         //if from any reason the program failed in open the file we will throw an error
         if(!fileForWriteObj){
@@ -63,8 +64,9 @@ public:
             ///else we will search him in the files - if we find we will read the file into object and return this object
         else {
             fstream fileForReadObj;
-            hash<Problem> hash;
-            string file_name = hash(key)+".txt";
+            string file_name = key+".txt";
+//            hash<Problem> hash;
+//            string file_name = to_string(hash(key))+".txt";
             fileForReadObj.open(file_name,ios::in|ios::binary);
             string obj;
             //if the file not found or from any reason the program failed in open it- we will throw an error
@@ -88,14 +90,15 @@ public:
         }
     }
 
-    bool isSoulutaionExist(Problem key){
+    bool isSoulutaionExist(Problem key) {
         if (_cashe.find(key) != _cashe.end()) {
             return true;
         }
         else {
             fstream fileForReadObj;
-            hash<Problem> hash;
-            string file_name = hash(key)+".txt";
+            string file_name = key+".txt";
+//            hash<Problem> hash;
+//            string file_name = to_string(hash(key))+".txt";
             fileForReadObj.open(file_name,ios::in|ios::binary);
             string obj;
             //if the file not found or from any reason the program failed in open it- we will throw an error

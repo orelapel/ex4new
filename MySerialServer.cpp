@@ -10,11 +10,12 @@
 #include <thread>
 
 int MySerialServer::start(int port, ClientHandler *clientHandler) {
+    this->socketfd = -1;
     thread(&MySerialServer::startThread, this, port,clientHandler).join();
 }
 int MySerialServer::startThread(int port, ClientHandler *clientHandler) {
     //create socket
-    int socketfd = socket(AF_INET, SOCK_STREAM, 0);
+    socketfd = socket(AF_INET, SOCK_STREAM, 0);
     if (socketfd == -1) {
         //error
         std::cerr << "Could not create a socket" << std::endl;
@@ -31,15 +32,15 @@ int MySerialServer::startThread(int port, ClientHandler *clientHandler) {
     // to a number that the network understands.
 
     struct timeval tv;
-    tv.tv_sec = 120;
-    setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+    tv.tv_sec = 60;
+    tv.tv_usec = 0;
+    setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof(tv));
 
     //the actual bind command
     if (bind(socketfd, (struct sockaddr *) &address, sizeof(address)) == -1) {
         std::cerr << "Could not bind the socket to an IP" << std::endl;
         return -2;
     }
-
 
     //making socket listen to the port
     if (listen(socketfd, 5) == -1) { //can also set to SOMAXCON (max connections)
@@ -48,10 +49,8 @@ int MySerialServer::startThread(int port, ClientHandler *clientHandler) {
     } else {
         std::cout << "Server is now listening ..." << std::endl;
     }
-    while (!shouldStop) {
-        // accepting a client
-        int client_socket = accept(socketfd, (struct sockaddr *) &address,
-                                   (socklen_t *) &address);
+    while (true) {
+        int client_socket = accept(socketfd, (struct sockaddr *) &address, (socklen_t *) &address);
 
         if (client_socket == -1) {
             std::cerr << "Error accepting client" << std::endl;
@@ -59,10 +58,8 @@ int MySerialServer::startThread(int port, ClientHandler *clientHandler) {
         }
 
         clientHandler->handleClient(client_socket);
-        stop();
     }
-    close(socketfd); //closing the listening socket
 }
 void MySerialServer::stop() {
-    shouldStop = true;
+    close(socketfd);
 }

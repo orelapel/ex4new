@@ -9,6 +9,7 @@
 #include "MyClientHandler.h"
 #include "SolverAdapter.h"
 #include "BestFirstSearch.h"
+#include "AStarSearch.h"
 
 namespace boot {
     class Main;
@@ -19,11 +20,28 @@ public:
     static int main(int port) {
         try {
             MySerialServer *mySerial = new MySerialServer();
-            Searcher<Point*>* searcher = new BestFirstSearch<Point*>();
+            Searcher<Point*>* searcher = new AStarSearch<Point*>();
             Solver<Matrix*, string> *solverAdapter = new SolverAdapter<Point*>(searcher);
-            CacheManager<Matrix*> *fileCashe = new FileCacheManager<Matrix*>(10);
+            CacheManager<string> *fileCashe = new FileCacheManager<string>(10);
             ClientHandler *ch = new MyClientHandler(fileCashe,solverAdapter);
             mySerial->start(port,ch);
+            mySerial->stop();
+
+//            vector<vector<double>> maze = {{1,3,1},
+//                                           {2,-1,1},
+//                                           {4,5,0}};
+
+
+//            vector<vector<double>> maze = {{5,-1,0,0,0,0},
+//                                           {2,8,4,9,0,0},
+//                                           {0,-1,1,-1,6,7},
+//                                           {0,0,0,3,-1,4},
+//                                           {0,0,0,1,-1,4},
+//                                           {0,0,0,1,3,4}};
+//            Matrix* matrix = new Matrix(maze, new Point(0,0), new Point(5,5));
+//            cout<<solverAdapter->solve(matrix)<<endl;
+
+
 //
 
 //            Solver<vector<vector<vector<double>>*, string> = new SolverAdapter();

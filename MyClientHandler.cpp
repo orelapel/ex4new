@@ -12,7 +12,7 @@
 #include "StringReverser.h"
 #include "FileCacheManager.h"
 
-MyClientHandler::MyClientHandler(CacheManager<Matrix *> *c, Solver<Matrix *, string> *s) {
+MyClientHandler::MyClientHandler(CacheManager<string> *c, Solver<Matrix *, string> *s) {
     cache = c;
     solver = s;
 }
@@ -24,7 +24,7 @@ void MyClientHandler::handleClient(int socket) {
     bool isFirst = true;
     Point *initState, *goalState;
     vector<string> lines;
-    CacheManager<string> *cache = new FileCacheManager<string>(10);
+//    CacheManager<string> *cache = new FileCacheManager<string>(10);
     bool stillData = true;
     while(stillData && read( socket , buffer, 1)>0) {
         while(buffer[0]!='\n') {
@@ -39,23 +39,6 @@ void MyClientHandler::handleClient(int socket) {
         } else {
             lines.push_back(line);
         }
-//        if (cache->isSoulutaionExist(line)){
-//            string sol = cache->get(line);
-//            int length = sol.length();
-//            char lineToChar[length+1];
-//            strcpy(lineToChar,sol.c_str());
-//            send(socket,lineToChar,length+1,0);
-//            cout<<sol<<endl;
-//        } else {
-//            Solver *stringReverse = new StringReverser();
-//            string sol = stringReverse->solve(line);
-//            cache->insert(line, sol);
-//            int length = sol.length();
-//            char lineToChar[length+1];
-//            strcpy(lineToChar,sol.c_str());
-//            send(socket,lineToChar,length+1,0);
-//            cout<<sol<<endl;
-//        }
         line = "";
     }
     initState = new Point(0,0);
@@ -86,24 +69,38 @@ void MyClientHandler::handleClient(int socket) {
         }
     }
     lines.pop_back();
-    // TODO check if always the matrix is squer
-    vector<vector<double>> matrix( lines.size() , vector<double> (lines.size()));
+
+    vector<vector<double>> matrix;
     int index = 0;
+    string bigLine;
     for (std::vector<string>::iterator it = lines.begin(); it != lines.end(); ++it) {
+        bigLine += (*it);
+        vector<double> lineVector;
         int lenLine = (*it).length();
         char lineInt[lenLine+1];
         strcpy(lineInt,(*it).c_str());
         value = strtok (lineInt," ,");
         int k=0;
         while (value!=NULL) {
-            matrix[index][k]=(stod(value));
+            lineVector.push_back(stod(value));
             value = strtok(NULL, " ,");
-            k++;
         }
-        index++;
-//        matrix->push_back(lineVector);
+        matrix.push_back(lineVector);
     }
     Matrix *matrixSearchabe = new Matrix(matrix, initState, goalState);
-    matrixSearchabe->initialStateMatrix();
-    cout<<solver->solve(matrixSearchabe)<<endl;
+    hash<string> hash;
+    string bigLineHash = to_string(hash(bigLine));
+    string sol;
+    if (cache->isSoulutaionExist(bigLineHash)){
+        sol = cache->get(bigLineHash);
+        cout<<sol<<endl;
+    } else {
+        sol = solver->solve(matrixSearchabe);
+        cache->insert(bigLineHash, sol);
+        cout << sol << endl;
+    }
+    int length = sol.length();
+    char lineToChar[length+1];
+    strcpy(lineToChar,sol.c_str());
+    send(socket,lineToChar,length+1,0);
 }
