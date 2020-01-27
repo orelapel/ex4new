@@ -22,11 +22,11 @@ using namespace std;
 
 template <class T>
 class BestFirstSearch: public Searcher<T> {
-    priority_queue<State<T>*, vector<State<T>*>, StateComperator<T>> openList;
-    unordered_set<State<T>*> closed;
     int numberOfStates;
 public:
     string search(Searchable<T>* searchable) {
+        priority_queue<State<T>*, vector<State<T>*>, StateComperator<T>> openList;
+        unordered_set<State<T>*> closed;
         State<T>* init = searchable->getInitialState();
         openList.push(init);
         searchable->getInitialState()->setTraceCost(searchable->getInitialState()->getCost());
@@ -35,26 +35,30 @@ public:
             openList.pop();
             closed.insert(n);
             if (searchable->isGoalState(n)) {
-//                cout<<backTrace(closed)<<endl;
                 return createPath(searchable);
             }
 
             vector<State<T>*> succerssors = searchable->getAllPosibleState(n);
             for (typename std::vector<State<T>*>::iterator it = succerssors.begin(); it != succerssors.end(); ++it) {
-                if (closed.find(*it) == closed.end() && !findInOpenList(*it)) {
+                // if it is a new state
+                if (closed.find(*it) == closed.end() && !findInOpenList((*it),openList)) {
                     (*it)->setCameFrom(n);
                     (*it)->setTraceCost(n->getTraceCost() + (*it)->getCost());
                     openList.push(*it);
-                } else if (findInOpenList(*it) && (*it)->getTraceCost() > n->getTraceCost() + (*it)->getCost()) {
+                    // if it was before in openList but now the costTrace is better
+                } else if (findInOpenList((*it),openList) && (*it)->getTraceCost() > n->getTraceCost() + (*it)->getCost()) {
                     stack<State<T>*> tempStack;
+                    // remove from the openList to stack until we get to the state we want
                     while (openList.top() != (*it)) {
                         tempStack.push(openList.top());
                         openList.pop();
                     }
+                    // change it with new details
                     State<T>* temp = openList.top();
                     openList.pop();
                     temp->setTraceCost(n->getTraceCost() + (*it)->getCost());
                     temp->setCameFrom(n);
+                    // push back the states we took out from the openList
                     openList.push(temp);
                     while (!tempStack.empty()){
                         openList.push(tempStack.top());
@@ -66,6 +70,7 @@ public:
         return "no path exist";
     }
     string createPath(Searchable<T>* searchable) {
+        cout<<"no problem yet"<<endl;
         numberOfStates=0;
         string path = "";
         State<T> *currentState = searchable->getGoalState();
@@ -80,6 +85,8 @@ public:
             currentState = currentState->getCameFrom();
             iCameFrom = currentState->getState()->getX();
             jCameFrom = currentState->getState()->getY();
+
+            // find the direction we came from
             if (i<iCameFrom){
                 path = path+"Up ";
             }
@@ -92,6 +99,7 @@ public:
             else if(j>jCameFrom){
                 path = path + "Right ";
             }
+            // find the trace cost until this state
             path = path +"(" + to_string(traceOfCurrentState) + "), ";
             stackForPath.push(path);
             path="";
@@ -104,17 +112,27 @@ public:
             //remove this element from the stack after we use it
             stackForPath.pop();
         }
+        numberOfStates=numberOfStates+1;
+        returnString+="\nnumber of nodes evaluated: ";
+        returnString+=to_string(numberOfStates);
+        returnString+="\n";
         return returnString;
     }
-    int getNumOfNodesEvaluated(){
+
+    Searcher<T>* clone () override {
+        return new BestFirstSearch();
+    }
+    int getNumOfNodesEvaluated() {
         return numberOfStates;
     }
-    bool findInOpenList(State<T>* state) {
+    bool findInOpenList(State<T>* state,priority_queue<State<T>*, vector<State<T>*>, StateComperator<T>> openList) {
         stack<State<T>*> temp;
         while (!openList.empty()) {
             temp.push(openList.top());
+            // if the state exist in the openList
             if (state==openList.top()) {
                 temp.pop();
+                // return the states to the openList
                 while (!temp.empty()){
                     openList.push(temp.top());
                     temp.pop();
@@ -123,6 +141,7 @@ public:
             }
             openList.pop();
         }
+        // return the states to the openList
         while (!temp.empty()){
             openList.push(temp.top());
             temp.pop();

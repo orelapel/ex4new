@@ -22,3 +22,6 @@ void Point::setY(int numY) {
 string Point::toString() {
     return "(" + to_string(x) + "," + to_string(y)+")";
 }
+Point* Point:: clone() {
+    return new Point(x,y);
+}

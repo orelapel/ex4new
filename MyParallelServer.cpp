@@ -1,21 +1,24 @@
 //
-// Created by noa on 13/01/2020.
+// Created by noa on 23/01/2020.
 //
 
-#include "MySerialServer.h"
+#include "MyParallelServer.h"
 #include <sys/socket.h>
 #include <iostream>
 #include <unistd.h>
 #include <netinet/in.h>
 #include <thread>
+#include <vector>
 
-int MySerialServer::start(int port, ClientHandler *clientHandler) {
-    this->socketfd=-1;
-    thread(&MySerialServer::startThread, this, port,clientHandler).join();
+int MyParallelServer::runOnClient(int port, ClientHandler *clientHandler,int client_Socket) {
+    clientHandler->handleClient(client_Socket);
+    delete clientHandler;
 }
-int MySerialServer::startThread(int port, ClientHandler *clientHandler) {
+
+int MyParallelServer::start(int port, ClientHandler *clientHandler) {
+    vector<thread> vectorThreads;
     //create socket
-    int socketfd = socket(AF_INET, SOCK_STREAM, 0);
+    socketfd = socket(AF_INET, SOCK_STREAM, 0);
     if (socketfd == -1) {
         //error
         std::cerr << "Could not create a socket" << std::endl;
@@ -30,9 +33,9 @@ int MySerialServer::startThread(int port, ClientHandler *clientHandler) {
     address.sin_port = htons(port);
 
     struct timeval tv;
-    tv.tv_sec = 15;
+    tv.tv_sec = 60;
     tv.tv_usec = 0;
-    setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+    setsockopt(socketfd, SOL_SOCKET, SO_RCVTIMEO, (const char *) &tv, sizeof(tv));
 
     //the actual bind command
     if (bind(socketfd, (struct sockaddr *) &address, sizeof(address)) == -1) {
@@ -40,27 +43,28 @@ int MySerialServer::startThread(int port, ClientHandler *clientHandler) {
         return -2;
     }
 
-
     //making socket listen to the port
-    if (listen(socketfd, 5) == -1) { //can also set to SOMAXCON (max connections)
+    if (listen(socketfd, 20) == -1) { //can also set to SOMAXCON (max connections)
         std::cerr << "Error during listening command" << std::endl;
         return -3;
     } else {
         std::cout << "Server is now listening ..." << std::endl;
     }
     while (true) {
-        // accepting a client
         int client_socket = accept(socketfd, (struct sockaddr *) &address,
                                    (socklen_t *) &address);
 
         if (client_socket == -1) {
             std::cerr << "Error accepting client" << std::endl;
-            return -4;
+            break;
         }
-
-        clientHandler->handleClient(client_socket);
+        vectorThreads.push_back(thread(&MyParallelServer::runOnClient, this, port, clientHandler->clone(), client_socket));
+    }
+    for (std::thread & th : vectorThreads){
+        th.join();
     }
 }
-void MySerialServer::stop() {
+
+void MyParallelServer::stop() {
     close(socketfd);
 }

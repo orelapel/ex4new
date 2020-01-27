@@ -11,7 +11,6 @@
 #include "StringReverser.h"
 #include "FileCacheManager.h"
 
-//template <class Solution, class Problem>
 void MyTestClientHandler::handleClient(int socket) {
      char buffer[1]={0};
      string line;
@@ -46,4 +45,8 @@ void MyTestClientHandler::handleClient(int socket) {
          }
          line = "";
     }
+}
+
+MyTestClientHandler* MyTestClientHandler::clone() {
+    return new MyTestClientHandler(solve->clone(),cashe->clone());
 }

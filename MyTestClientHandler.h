@@ -10,7 +10,6 @@
 #include "Solver.h"
 #include "CacheManager.h"
 
-//template <class Problem, class Solution>
 class MyTestClientHandler: public ClientHandler {
     Solver<string ,string> *solve;
     CacheManager<string> *cashe;
@@ -20,6 +19,7 @@ public:
         solve = solver;
         cashe = myCashe;
     }
+    MyTestClientHandler* clone();
 };
 
 

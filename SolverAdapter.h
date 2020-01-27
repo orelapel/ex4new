@@ -15,15 +15,23 @@ template <class T>
 class SolverAdapter:public Solver<Matrix*, string> {
     Searcher<T> *searcher;
     Matrix *searchable;
-//    Point *initialP, *goalP;
+    int numOfNodes;
 public:
     SolverAdapter(Searcher<T> *s):searcher(s){};
     string solve(Matrix* prob) override {
         setSearchable(prob);
+        // run the search method of the searcher we got
         return searcher->search(prob);
     }
+    SolverAdapter* clone() {
+        return new SolverAdapter(searcher);
+    }
+
     void setSearchable(Matrix *s){
         searchable = s;
+    }
+    int getNumOfNodes(){
+        return numOfNodes;
     }
 };
 

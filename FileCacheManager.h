@@ -19,19 +19,19 @@ public:
     FileCacheManager(unsigned int capacity){
         capacityRam=capacity;
     }
+    CacheManager<Problem>* clone() override {
+        return new FileCacheManager(capacityRam);
+    }
 
     void insert(Problem key, string obj) {
         fstream fileForWriteObj;
         string file_name = key+".txt";
-//        hash<Problem> hash;
-//        string file_name = to_string(hash(key))+".txt";
         fileForWriteObj.open(file_name,ios::out|ios::binary);
         //if from any reason the program failed in open the file we will throw an error
         if(!fileForWriteObj){
             throw("Error in creating file");
         }
         //write the object for file
-//        fileForWriteObj.write((char*)&obj,sizeof(obj));
         fileForWriteObj<<obj<<endl;
         fileForWriteObj.close();
         //for update the data of the object
@@ -97,8 +97,6 @@ public:
         else {
             fstream fileForReadObj;
             string file_name = key+".txt";
-//            hash<Problem> hash;
-//            string file_name = to_string(hash(key))+".txt";
             fileForReadObj.open(file_name,ios::in|ios::binary);
             string obj;
             //if the file not found or from any reason the program failed in open it- we will throw an error

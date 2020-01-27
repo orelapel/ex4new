@@ -16,6 +16,8 @@ class StringReverser : public Solver<string,string>{
 public:
     string solve(string s);
     ~StringReverser();
+    StringReverser* clone();
+    int getNumOfNodes();
 };
 
 

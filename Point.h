@@ -19,6 +19,7 @@ public:
     void setX(int numX);
     void setY(int numY);
     string toString();
+    Point* clone();
 };
 
 #endif //EX4_POINT_H

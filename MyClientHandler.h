@@ -19,6 +19,7 @@ private:
 public:
     MyClientHandler(CacheManager<string> *c, Solver<Matrix*,string> *s);
     void handleClient(int socket) override;
+    MyClientHandler* clone();
 };
 
 #endif //EX4_MYCLIENTHANDLER_H

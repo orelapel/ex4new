@@ -24,13 +24,16 @@ void MyClientHandler::handleClient(int socket) {
     bool isFirst = true;
     Point *initState, *goalState;
     vector<string> lines;
-//    CacheManager<string> *cache = new FileCacheManager<string>(10);
     bool stillData = true;
+
+    // insert every line to vector
     while(stillData && read( socket , buffer, 1)>0) {
+        // read line by line
         while(buffer[0]!='\n') {
             line += buffer[0];
             read( socket , buffer, 1);
         }
+        // convert to char[]
         int len = line.length();
         char lineChar[len+1];
         strcpy(lineChar,line.c_str());
@@ -41,6 +44,8 @@ void MyClientHandler::handleClient(int socket) {
         }
         line = "";
     }
+
+    // define initial and goal
     initState = new Point(0,0);
     goalState = new Point(0,0);
     string pointGoal = lines.back();
@@ -70,6 +75,7 @@ void MyClientHandler::handleClient(int socket) {
     }
     lines.pop_back();
 
+    // create matrix with the data
     vector<vector<double>> matrix;
     int index = 0;
     string bigLine;
@@ -87,6 +93,8 @@ void MyClientHandler::handleClient(int socket) {
         }
         matrix.push_back(lineVector);
     }
+
+    // create Matrix object
     Matrix *matrixSearchabe = new Matrix(matrix, initState, goalState);
     hash<string> hash;
     string bigLineHash = to_string(hash(bigLine));
@@ -99,8 +107,13 @@ void MyClientHandler::handleClient(int socket) {
         cache->insert(bigLineHash, sol);
         cout << sol << endl;
     }
+
+    // send the solution back to client
     int length = sol.length();
     char lineToChar[length+1];
     strcpy(lineToChar,sol.c_str());
     send(socket,lineToChar,length+1,0);
+}
+MyClientHandler* MyClientHandler::clone(){
+    return new MyClientHandler(cache->clone(),solver->clone());
 }

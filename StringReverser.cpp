@@ -11,3 +11,9 @@ string StringReverser::solve(string s){
 StringReverser:: ~StringReverser(){
 
 }
+StringReverser* StringReverser::clone() {
+    return new StringReverser();
+}
+int StringReverser::getNumOfNodes() {
+    return 0;
+}

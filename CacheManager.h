@@ -22,6 +22,8 @@ public:
     virtual void foreach(void (*func)(string &obj))=0;
 
     virtual bool isSoulutaionExist(Problem key)=0;
+
+    virtual CacheManager<Problem>* clone() =0;
 };
 
 #endif //EX4_CACHEMANAGER_H

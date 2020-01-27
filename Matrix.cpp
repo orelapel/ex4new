@@ -10,6 +10,7 @@ Matrix::Matrix(vector<vector<double>> matrixProblem, Point* pInit, Point* pGoal)
     goal = pGoal;
     initialStateMatrix();
 }
+
 void Matrix::initialStateMatrix() {
     int i=0,j;
     for (std::vector<vector<double>>::iterator it = matrix.begin(); it != matrix.end(); ++it) {
@@ -37,36 +38,29 @@ State<Point*>* Matrix::getGoalState() {
 bool Matrix::isGoalState(State<Point*>* state) {
     return ((state->getState()->getX() == goal->getX())
     && (state->getState()->getY()) == goal->getY());
-//    return goal == state->getState();
 }
 
 vector<State<Point*> *> Matrix::getAllPosibleState(State<Point*> *state) {
     vector<State<Point*>*> allNeigth;
     int i = state->getState()->getX(), j = state->getState()->getY();
     // create the states of the neighbors
+    if (i+1 < stateMatrix.size() && (matrix[i+1])[j] != -1){
+        State<Point*>* downState = (stateMatrix[i+1])[j];
+        allNeigth.push_back(downState);
+    }
+    if (i-1 >=0 && (matrix[i-1])[j] != -1){
+        State<Point*>* upState = (stateMatrix[i-1])[j];
+        allNeigth.push_back(upState);
+    }
     if (j+1<stateMatrix.front().size() && (matrix[i])[j+1] != -1){
         State<Point*>* rightState = (stateMatrix[i])[j+1];
-//        rightState->setCameFrom(state);
-//        rightState->setTraceCost(state->getTraceCost() + rightState->getCost());
         allNeigth.push_back(rightState);
     }
     if (j-1 >=0 && (matrix[i])[j-1] != -1){
         State<Point*>* leftState = (stateMatrix[i])[j-1];
-//        leftState->setCameFrom(state);
-//        leftState->setTraceCost(state->getTraceCost() + leftState->getCost());
         allNeigth.push_back(leftState);
     }
-    if (i-1 >=0 && (matrix[i-1])[j] != -1){
-        State<Point*>* upState = (stateMatrix[i-1])[j];
-//        upState->setCameFrom(state);
-//        upState->setTraceCost(state->getTraceCost() + upState->getCost());
-        allNeigth.push_back(upState);
-    }
-    if (i+1 < stateMatrix.size() && (matrix[i+1])[j] != -1){
-        State<Point*>* downState = (stateMatrix[i+1])[j];
-//        downState->setCameFrom(state);
-//        downState->setTraceCost(state->getTraceCost() + downState->getCost());
-        allNeigth.push_back(downState);
-    }
+
+
     return allNeigth;
 }

@@ -15,13 +15,16 @@ class State{
     double hAstar;
     State<T>* cameFrom;
     T myState;
+    int colorOfState;
 public:
+    enum color { white =1, yellow=2};
     State(T state, State<T>* s, double c) {
         myState = state;
         cameFrom = s;
         cost = c;
         traceCost = std::numeric_limits<int>::max();
-        hAstar = 0;
+        hAstar = std::numeric_limits<int>::max();
+        colorOfState =white;
     }
     void setHAstar(double f){
         hAstar = f;
@@ -49,6 +52,12 @@ public:
     }
     State<T>* getCameFrom(){
         return cameFrom;
+    };
+    void setColor(int color) {
+        colorOfState = color;
+    }
+    int getColor() {
+        return colorOfState;
     }
 };
 
